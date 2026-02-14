@@ -1,0 +1,149 @@
+<div class="container">
+  <h1>Gap Analysis – TeachAssist</h1>
+
+  <!-- ================= UPLOAD CARD ================= -->
+  <div class="card">
+
+    <div class="upload-grid">
+
+      <!-- Question Paper -->
+      <label class="upload-box">
+        <input
+          type="file"
+          hidden
+          accept=".pdf,.docx"
+          (change)="onQuestionPaper($event)"
+        />
+
+        <div class="upload-icon">📄</div>
+        <p>{{ questionPaper ? 'Question Paper Uploaded' : 'Upload Question Paper' }}</p>
+        <small>PDF / DOCX</small>
+
+        <div class="file-name" *ngIf="questionPaper">
+          {{ questionPaper.name }}
+        </div>
+      </label>
+
+      <!-- Marksheet -->
+      <label class="upload-box">
+        <input
+          type="file"
+          hidden
+          accept=".xlsx,.csv"
+          (change)="onMarksheet($event)"
+        />
+
+        <div class="upload-icon">📊</div>
+        <p>{{ marksheet ? 'Marksheet Uploaded' : 'Upload Marksheet' }}</p>
+        <small>Excel / CSV</small>
+
+        <div class="file-name" *ngIf="marksheet">
+          {{ marksheet.name }}
+        </div>
+      </label>
+
+    </div>
+
+    <div class="analyze-center">
+  <button class="primary-btn" (click)="analyze()" [disabled]="loading">
+    🔍 Analyze Gap
+  </button>
+</div>
+
+  </div>
+
+  <!-- ================= RESULT CARD ================= -->
+  <div class="card" *ngIf="result">
+
+    <h3>Gap Analysis Result</h3>
+
+    <!-- ✅ SINGLE CHART ONLY -->
+    <div class="chart-wrapper">
+      <canvas id="classChart"></canvas>
+    </div>
+
+    <button class="secondary-btn" (click)="exportToCSV()">Export CSV</button>
+
+    <!-- ================= QUESTION-WISE TABLE ================= -->
+    <table class="gap-table">
+      <thead>
+        <tr>
+          <th>Question</th>
+          <th>CLO</th>
+          <th>Max Marks</th>
+          <th>Threshold Marks</th>
+          <th>Students Below</th>
+          <th>Gap %</th>
+          <th>Student Names</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let item of result.gap_results">
+          <td><strong>{{ item.question }}</strong></td>
+          <td><span class="clo-badge">{{ item.clo }}</span></td>
+          <td>{{ item.max_marks }}</td>
+          <td>{{ item.threshold_marks }}</td>
+          <td>{{ item.students_below_threshold }}</td>
+          <td>{{ item.gap_percentage }}%</td>
+          <td>
+            {{ item.student_names?.length ? item.student_names.join(', ') : '—' }}
+          </td>
+          <td>
+            <span
+              class="status"
+              [class.no-gap]="item.status === 'No Gap'"
+              [class.gap]="item.status === 'Gap Identified'">
+              {{ item.status }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ================= CLO-WISE ANALYSIS ================= -->
+    <div *ngIf="result.clo_results?.length">
+      <h2 class="title" style="margin-top: 40px;">🎯 CLO-wise Gap Analysis</h2>
+
+      <table class="gap-table">
+        <thead>
+          <tr>
+            <th>CLO</th>
+            <th>Questions</th>
+            <th>Max Marks</th>
+            <th>Threshold Marks</th>
+            <th>Students Below</th>
+            <th>Gap %</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let clo of result.clo_results">
+            <td><strong>{{ clo.clo }}</strong></td>
+            <td>{{ clo.questions.join(', ') }}</td>
+            <td>{{ clo.max_marks }}</td>
+            <td>{{ clo.threshold_marks }}</td>
+            <td>{{ clo.students_below_threshold }}</td>
+            <td>{{ clo.gap_percentage }}%</td>
+            <td>
+              <span
+                class="status"
+                [class.no-gap]="clo.status === 'OK'"
+                [class.gap]="clo.status === 'Weak CLO'">
+                {{ clo.status }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ================= AI RECOMMENDATIONS ================= -->
+    <div class="recommendation-box" *ngIf="result.llm_recommendations">
+      <h3>🤖 AI Recommendations</h3>
+      <p>{{ result.llm_recommendations }}</p>
+    </div>
+  </div>
+</div>

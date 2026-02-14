@@ -1,0 +1,176 @@
+/* ================= GLOBAL RESET ================= */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  background: #f5f8fc;
+
+  /* ONLY Chrome scrollbar */
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ================= ROOT ================= */
+.layout {
+  min-height: 100vh;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  height: 100vh;
+  width: 220px;
+
+  background: #0a3c7a;
+  color: #fff;
+
+  display: flex;
+  flex-direction: column;
+
+  border-top-right-radius: 24px;
+  border-bottom-right-radius: 24px;
+
+  transition: width 0.25s ease;
+  z-index: 1000;
+}
+
+/* COLLAPSED = REAL COLLAPSE */
+.sidebar.closed {
+  width: 64px;
+}
+
+/* Toggle */
+.toggle-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  padding: 14px;
+  cursor: pointer;
+}
+
+/* Sidebar content */
+.sidebar-shell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0.75rem;
+}
+
+/* Teacher */
+.teacher-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.teacher-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.teacher-name {
+  font-weight: 200;
+  font-size: 1rem;
+  color: #e8f0ff;
+}
+
+/* NAV */
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.nav-btn {
+  border: none;
+  background: transparent;
+  color: #dbe9ff;
+  text-align: left;
+  padding: 0.7rem 1rem;
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+.nav-btn.active {
+  background: #355f9c;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Collapse hides text completely */
+.sidebar.closed .teacher-name,
+.sidebar.closed .nav-btn {
+  display: none;
+}
+
+/* Logout */
+.logout-btn {
+  margin-top: auto;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  border: none;
+  background: #143f7a;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* ================= CONTENT ================= */
+.content {
+  margin-left: 220px;
+  padding: 2.5rem 3rem;
+
+  /* DO NOT SCROLL HERE */
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* When sidebar collapsed */
+.sidebar.closed ~ .content {
+  margin-left: 64px;
+}
+
+/* NEVER constrain width */
+.content > * {
+  max-width: 100%;
+}
+/* ================= HARD COLLAPSE MODE ================= */
+.sidebar.closed {
+  width: 56px;
+  padding: 0;
+}
+
+/* Hide EVERYTHING except toggle */
+.sidebar.closed .sidebar-shell {
+  display: none;
+}
+
+/* Keep hamburger visible */
+.sidebar.closed .toggle-btn {
+  display: block;
+  margin: 12px auto;
+}
+
+/* Prevent sidebar from scrolling or shifting */
+.sidebar {
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+}
+
+/* Content must shift fully */
+.sidebar.closed + .content,
+.sidebar.closed ~ .content {
+  margin-left: 56px !important;
+}

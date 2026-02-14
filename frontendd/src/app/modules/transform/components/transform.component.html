@@ -1,0 +1,121 @@
+<div class="page">
+
+  <header class="header">
+    <h1>Transformer</h1>
+  </header>
+
+  <div class="card">
+
+    <!-- ================= FILE UPLOAD CARDS ================= -->
+<div class="upload-grid">
+
+  <!-- Source Document -->
+  <label class="upload-box">
+    <input
+      type="file"
+      hidden
+      (change)="onSource($event)"
+    />
+
+    <div class="upload-icon">📄</div>
+
+    <p>
+      {{ sourceFile ? 'Source Document Uploaded' : 'Upload Source Document' }}
+    </p>
+
+    <small>PDF / DOCX / XLSX</small>
+
+    <div class="file-name" *ngIf="sourceFile">
+      {{ sourceFile.name }}
+    </div>
+  </label>
+
+  <!-- Template Document -->
+  <label class="upload-box">
+    <input
+      type="file"
+      hidden
+      (change)="onTemplate($event)"
+    />
+
+    <div class="upload-icon">📑</div>
+
+    <p>
+      {{ templateFile ? 'Template Document Uploaded' : 'Upload Template Document' }}
+    </p>
+
+    <small>PDF / DOCX / XLSX</small>
+
+    <div class="file-name" *ngIf="templateFile">
+      {{ templateFile.name }}
+    </div>
+  </label>
+
+</div>
+
+
+    <div class="field">
+      <label>Output Format</label>
+      <select [(ngModel)]="outputType">
+        <option value="excel">Excel (.xlsx)</option>
+        <option value="word">Word (.docx)</option>
+        <option value="pdf">PDF (.pdf)</option>
+      </select>
+    </div>
+
+    <button
+  class="primary-btn"
+  (click)="submit()"
+  [disabled]="loading">
+
+  <span *ngIf="!loading">Transform Document</span>
+
+  <span class="loader-wrap" *ngIf="loading">
+    <span class="spinner"></span>
+    Transforming…
+  </span>
+
+</button>
+
+
+    <p *ngIf="error" class="error-text">{{ error }}</p>
+  </div>
+
+  <!-- ✅ RESULT -->
+  <div class="result" *ngIf="result">
+
+    <h3>Transformation Successful</h3>
+    <p class="success-text">Columns were automatically mapped.</p>
+
+    <button
+      class="toggle-mapping-btn"
+      (click)="toggleMapping()"
+      [class.open]="showMapping">
+      {{ showMapping ? 'Hide Mapping' : 'Show Mapping' }}
+      <span>▼</span>
+    </button>
+
+    <div class="mapping-box" *ngIf="showMapping">
+      <table>
+        <thead>
+          <tr>
+            <th>Source Column</th>
+            <th>Template Column</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let m of result.mapping | keyvalue">
+            <td>{{ m.key }}</td>
+            <td>{{ m.value }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <button class="download-btn" (click)="download()">
+      Download Transformed File
+    </button>
+
+  </div>
+
+</div>

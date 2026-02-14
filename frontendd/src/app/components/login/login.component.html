@@ -1,0 +1,46 @@
+<div class="login-page">
+  <div class="login-card">
+
+    <!-- 🎓 LOGO -->
+    <div class="logo">
+      <div class="cap">
+        <div class="cap-top"></div>
+        <div class="cap-base"></div>
+        <div class="cap-tassel"></div>
+      </div>
+    </div>
+
+    <h2>TeachAssist</h2>
+    <p class="subtitle">Teacher Login</p>
+
+    <!-- 👇 wrapper only for layout -->
+    <div class="login-fields">
+      <input
+        class="login-input"
+        type="text"
+        placeholder="Username"
+        [(ngModel)]="username"
+      />
+
+      <input
+        class="login-input"
+        type="password"
+        placeholder="Password"
+        [(ngModel)]="password"
+      />
+
+      <div class="error" *ngIf="error">
+        {{ error }}
+      </div>
+
+      <button
+        type="button"
+        class="login-btn"
+        (click)="onLogin()"
+      >
+        Login
+      </button>
+    </div>
+
+  </div>
+</div>
